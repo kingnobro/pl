@@ -54,7 +54,23 @@ val test9_4 = what_month 32 = 2 *)
 (* val test10_1 = month_range (31, 34) = [1,2,2,2]
 val test10_2 = month_range (31, 31) = [1] *)
 
-val test11_1 = oldest([(2012,2,28),(2011,3,31),(2011,4,28)]) = SOME (2011,3,31)
+(* val test11_1 = oldest([(2012,2,28),(2011,3,31),(2011,4,28)]) = SOME (2011,3,31)
 val test11_2 = oldest([(2011,2,28),(2011,5,31),(2011,4,28)]) = SOME (2011,2,28)
 val test11_3 = oldest([(2011,2,28),(2011,3,31),(2012,4,28)]) = SOME (2011,2,28)
-val test11_4 = oldest([(1,2,3),(5,2,3),(7,2,3),(3,2,3)]) = SOME (1,2,3)
+val test11_4 = oldest([(1,2,3),(5,2,3),(7,2,3),(3,2,3)]) = SOME (1,2,3) *)
+
+(* val test12_1 = occur([1,2,3], 3) = true
+val test12_2 = occur([1,2,3], 1) = true
+val test12_3 = occur([1,2,3], 4) = false *)
+
+(* val test13_1 = remove_dup([1,2,3]) = [1,2,3]
+val test13_2 = remove_dup([1,2,3,2]) = [1,3,2]
+val test13_3 = remove_dup([1,2,3,3,3,3]) = [1,2,3] *)
+
+(* val test14_1 = number_in_months_challenge ([(2012,2,28),(2013,12,1),(2011,3,31),(2011,4,28)],[2,2,2,3,4]) = 3
+val test14_2 = number_in_months_challenge ([(2012,2,28),(2013,12,1),(2011,3,31),(2011,4,28)],[2,12,3,4]) = 4
+val test14_3 = number_in_months_challenge ([(2012,2,28),(2013,12,1),(2011,3,31),(2011,4,28)],[1]) = 0
+val test14_4 = number_in_months_challenge ([(2012,2,28),(2013,12,1),(2011,3,31),(2011,4,28)],[]) = 0 *)
+
+val test15_1 = reasonable_date(2008,2,29) = true
+val test15_2 = reasonable_date(2009,2,29) = false

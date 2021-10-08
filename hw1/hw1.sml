@@ -125,3 +125,61 @@ fun oldest(dates: (int * int * int) list) =
             else SOME first
         end
 
+
+(* whether a number occurs in a list *)
+fun occur(nums: int list, num: int) = 
+    if null nums
+    then false
+    else
+        if (hd nums) = num
+        then true
+        else occur(tl nums, num)
+
+
+fun number_in_months_challenge(date_list: (int*int*int) list, months: int list) = 
+    if null months
+    then 0
+    else
+        if occur(tl months, hd months)
+        then number_in_months_challenge(date_list, tl months)
+        else number_in_month(date_list, hd months) + number_in_months_challenge(date_list, tl months)
+
+
+fun dates_in_months_challenge(date_list: (int*int*int) list, months: int list) =
+    if null months
+    then []
+    else
+        if occur(tl months, hd months)
+        then dates_in_months_challenge(date_list, tl months)
+        else dates_in_month(date_list, hd months)@dates_in_months_challenge(date_list, tl months)
+
+
+fun is_leap_year(year: int) = 
+    if (year mod 400 = 0 orelse year mod 4 = 0) andalso not (year mod 100 = 0)
+    then true 
+    else false
+
+
+fun day_of_month(year:int, month:int) = 
+    if month = 1 then 31
+    else if month = 2 then (if is_leap_year(year) then 29 else 28)
+    else if month = 3 then 31
+    else if month = 4 then 30
+    else if month = 5 then 31
+    else if month = 6 then 30
+    else if month = 7 then 31
+    else if month = 8 then 31
+    else if month = 9 then 30
+    else if month = 10 then 31
+    else if month = 11 then 30
+    else if month = 12 then 31
+    else 0
+
+
+fun reasonable_date(year:int, month:int, day:int) = 
+    if year <= 0 orelse month < 1 orelse month > 12
+    then false
+    else
+        if day <= day_of_month(year, month)
+        then true
+        else false
