@@ -136,6 +136,7 @@ fun occur(nums: int list, num: int) =
         else occur(tl nums, num)
 
 
+(* if the (hd months) occurs in the (tl months), then we should ignore it *)
 fun number_in_months_challenge(date_list: (int*int*int) list, months: int list) = 
     if null months
     then 0
@@ -154,32 +155,20 @@ fun dates_in_months_challenge(date_list: (int*int*int) list, months: int list) =
         else dates_in_month(date_list, hd months)@dates_in_months_challenge(date_list, tl months)
 
 
-fun is_leap_year(year: int) = 
-    if (year mod 400 = 0 orelse year mod 4 = 0) andalso not (year mod 100 = 0)
-    then true 
-    else false
-
-
-fun day_of_month(year:int, month:int) = 
-    if month = 1 then 31
-    else if month = 2 then (if is_leap_year(year) then 29 else 28)
-    else if month = 3 then 31
-    else if month = 4 then 30
-    else if month = 5 then 31
-    else if month = 6 then 30
-    else if month = 7 then 31
-    else if month = 8 then 31
-    else if month = 9 then 30
-    else if month = 10 then 31
-    else if month = 11 then 30
-    else if month = 12 then 31
-    else 0
-
-
-fun reasonable_date(year:int, month:int, day:int) = 
-    if year <= 0 orelse month < 1 orelse month > 12
-    then false
-    else
-        if day <= day_of_month(year, month)
-        then true
-        else false
+fun reasonable_date (date : int * int * int) =
+    let    
+        (* get the nth number of a list *)
+        fun get_nth (lst : int list, n : int) =
+            if n=1
+            then hd lst
+            else get_nth(tl lst, n-1)
+        val year  = #1 date
+        val month = #2 date
+        val day   = #3 date
+        val leap  = year mod 400 = 0 orelse (year mod 4 = 0 andalso year mod 100 <> 0)
+        val feb_len = if leap then 29 else 28
+        val lengths = [31,feb_len,31,30,31,30,31,31,30,31,30,31]
+    in
+        year > 0 andalso month >= 1 andalso month <= 12
+        andalso day >= 1 andalso day <= get_nth(lengths,month)
+    end
