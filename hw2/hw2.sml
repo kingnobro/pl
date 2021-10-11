@@ -48,7 +48,7 @@ fun similar_names(substitutions:string list list, full_name:{first:string,middle
            [] => full_name::result
          | x::xs' => helper(xs', full_name, result@[{first=x, middle=m, last=l}])
    in
-      => helper(get_substitutions1(substitutions, f), full_name, [])
+      helper(get_substitutions1(substitutions, f), full_name, [])
    end
 
 
@@ -129,6 +129,43 @@ fun officiate (cards,plays,goal) =
                     [] => score(current_cards,goal)
                   | c::rest => if sum_cards (c::current_cards) > goal
                                then score(c::current_cards,goal)
+                               else loop (c::current_cards,rest,tail)
+    in 
+        loop ([],cards,plays)
+    end
+
+(* val score = fn : card list * int -> int *)
+fun score_challenge(cs, goal) = 
+   let
+      (* take every Ace as 11 score at first
+         then, if sum > goal, we can subtract the score *)
+      fun count_ace(cs) = 
+         case cs of 
+            [] => 0
+         |  c::cs' => (let val (s, r) = c in if r = Ace then 1 else 0 end) + count_ace(cs')
+      val sum = sum_cards(cs)
+      val same_color = all_same_color(cs)
+      val aces = count_ace(cs)
+      val score = if sum > goal then if sum - goal <= aces * 10 then 0 else 3 * (sum - 10 * aces - goal)
+                  else (goal - sum)
+   in
+      if same_color then score div 2 else score
+   end
+
+(* val officiate = fn : card list * move list * int -> int *)
+fun officiate_challenge (cards,plays,goal) =
+    let 
+        fun loop (current_cards,cards_left,plays_left) =
+            case plays_left of
+                [] => score_challenge(current_cards,goal)
+              | (Discard c)::tail => 
+                loop (remove_card(current_cards,c,IllegalMove),cards_left,tail)
+              | Draw::tail =>
+                (* note: must score immediately if go over goal! *)
+                case cards_left of
+                    [] => score_challenge(current_cards,goal)
+                  | c::rest => if sum_cards (c::current_cards) > goal
+                               then score_challenge(c::current_cards,goal)
                                else loop (c::current_cards,rest,tail)
     in 
         loop ([],cards,plays)
